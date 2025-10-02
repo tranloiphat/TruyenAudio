@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Thêm Chapter</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+    <style>.preview{width:140px;height:140px;object-fit:cover;border:1px dashed #ced4da;border-radius:.5rem;background:#f1f3f5}</style>
+</head>
+<body class="bg-light">
+<div class="container py-4">
+    <a class="btn btn-link mb-3" th:href="@{/chapter}">← Quay lại danh sách</a>
+    <div class="card shadow-sm">
+        <div class="card-header"><strong>Thêm Chapter</strong></div>
+        <div class="card-body">
+
+            <form th:action="@{/chapter/add}" th:object="${chapter}" method="post" enctype="multipart/form-data" novalidate>
+                <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+                <div class="mb-3">
+                    <label class="form-label">Tên/Thứ tự Chapter</label>
+                    <input type="number" th:field="*{tenChapter}" class="form-control" placeholder="Ví dụ: 1" />
+                    <div class="text-danger small" th:errors="*{tenChapter}"></div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">Ảnh (tùy chọn)</label>
+                    <input type="file" name="imageFile" class="form-control" accept="image/*" onchange="previewImage(event)" />
+                    <div class="text-danger small" th:errors="*{image}"></div>
+                    <div class="mt-2">
+                        <img id="imgPreview" class="preview" alt="preview" />
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    <button class="btn btn-primary" type="submit">Lưu</button>
+                    <a class="btn btn-outline-secondary" th:href="@{/chapter}">Hủy</a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+<script>
+    function previewImage(e){
+        const img = document.getElementById('imgPreview');
+        const file = e.target.files && e.target.files[0];
+        if (!file){ img.removeAttribute('src'); return; }
+        const reader = new FileReader();
+        reader.onload = ev => { img.src = ev.target.result; };
+        reader.readAsDataURL(file);
+    }
+</script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

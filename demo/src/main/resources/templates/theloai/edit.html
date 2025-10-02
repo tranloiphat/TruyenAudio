@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Sửa thể loại</title>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+  <style>
+    .preview { width: 140px; height: 140px; object-fit: cover; border: 1px dashed #ced4da; border-radius: .5rem; }
+    .current { width: 140px; height: 140px; object-fit: cover; border-radius: .5rem; background:#f1f3f5; }
+  </style>
+</head>
+<body class="bg-light">
+<div class="container py-4">
+  <a class="btn btn-link mb-3" th:href="@{/theloai}">← Quay lại danh sách</a>
+
+  <div class="card shadow-sm">
+    <div class="card-header"><strong>Sửa thể loại</strong></div>
+    <div class="card-body">
+
+      <!-- Quan trọng: th:object phải có để th:errors hoạt động an toàn -->
+      <form th:action="@{|/theloai/edit/${theloai.theLoaiId}|}"
+            th:object="${theloai}"
+            method="post"
+            enctype="multipart/form-data"
+            novalidate>
+
+        <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+        <div class="mb-3">
+          <label class="form-label">Tên thể loại <span class="text-danger">*</span></label>
+          <input type="text" th:field="*{tenTheLoai}" class="form-control" />
+          <!-- KHÔNG dùng #fields.hasErrors(...) -->
+          <div class="text-danger small" th:errors="*{tenTheLoai}"></div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label">Mô tả</label>
+          <textarea th:field="*{moTa}" rows="3" class="form-control"></textarea>
+          <div class="text-danger small" th:errors="*{moTa}"></div>
+        </div>
+
+        <div class="row g-3 mb-3">
+          <div class="col-md-6">
+            <label class="form-label">Ảnh hiện tại</label>
+            <div>
+              <img class="current" th:if="${theloai.image}" th:src="@{'/Image/' + ${theloai.image}}" alt="current" />
+              <span th:if="${theloai.image} == null" class="text-muted d-inline-block">Chưa có ảnh</span>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Tải ảnh mới (tùy chọn)</label>
+            <input type="file" name="imageFile" class="form-control" accept="image/*" onchange="previewImage(event)" />
+            <!-- Không bọc điều kiện, chỉ hiển thị khi có lỗi -->
+            <div class="text-danger small" th:errors="*{image}"></div>
+            <div class="mt-2">
+              <img id="imgPreview" class="preview" alt="preview" />
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex gap-2">
+          <button class="btn btn-primary" type="submit">Cập nhật</button>
+          <a class="btn btn-outline-secondary" th:href="@{/theloai}">Hủy</a>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  function previewImage(e){
+    const img = document.getElementById('imgPreview');
+    const file = e.target.files && e.target.files[0];
+    if (!file){ img.removeAttribute('src'); return; }
+    const reader = new FileReader();
+    reader.onload = ev => { img.src = ev.target.result; };
+    reader.readAsDataURL(file);
+  }
+</script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

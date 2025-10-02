@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Sửa User</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <style>
+        body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f6f7f9;margin:0}
+        .container{max-width:640px;margin:0 auto;padding:16px}
+        form{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:16px}
+        label{display:block;margin:10px 0 6px}
+        input{width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:8px}
+        .row{display:flex;gap:10px;margin-top:12px}
+        .btn{display:inline-block;padding:8px 12px;border-radius:8px;text-decoration:none;border:1px solid #e5e7eb;background:#fff}
+        .btn-primary{background:#2563eb;color:#fff;border-color:#2563eb}
+    </style>
+</head>
+<body>
+<div class="container">
+    <p><a class="btn" th:href="@{/user}">← Về danh sách</a></p>
+    <h2>Sửa User</h2>
+
+    <form th:action="@{|/user/edit/${user.userId}|}" th:object="${user}" method="post">
+        <input type="hidden" th:field="*{userId}"/>
+
+        <label for="hoten">Họ tên</label>
+        <input id="hoten" type="text" th:field="*{hoTen}" required/>
+
+        <label for="email">Email</label>
+        <input id="email" type="email" th:field="*{email}" required/>
+
+        <label for="sdt">SĐT</label>
+        <input id="sdt" type="number" th:field="*{sdt}" min="0"/>
+
+        <label for="capdo">Cấp độ</label>
+        <input id="capdo" type="number" th:field="*{capDo}" min="0"/>
+
+        <div class="row">
+            <button class="btn btn-primary" type="submit">Cập nhật</button>
+            <a class="btn" th:href="@{/user}">Hủy</a>
+        </div>
+    </form>
+</div>
+</body>
+</html>

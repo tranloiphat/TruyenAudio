@@ -1,0 +1,63 @@
+<!-- file: src/main/resources/templates/theloai/edit.html -->
+
+
+<form th:action="@{|/theloai/edit/${theloai.theLoaiId}|}" th:object="${theloai}" method="post" enctype="multipart/form-data" novalidate>
+    <input type="hidden" th:if="${_csrf}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+
+
+    <div class="mb-3">
+        <label class="form-label">Tên thể loại <span class="text-danger">*</span></label>
+        <input type="text" th:field="*{tenTheLoai}" class="form-control" />
+        <div class="text-danger small" th:errors="*{tenTheLoai}"></div>
+    </div>
+
+
+    <div class="mb-3">
+        <label class="form-label">Mô tả</label>
+        <textarea th:field="*{moTa}" rows="3" class="form-control"></textarea>
+        <div class="text-danger small" th:errors="*{moTa}"></div>
+    </div>
+
+
+    <div class="row g-3 mb-3">
+        <div class="col-md-6">
+            <label class="form-label">Ảnh hiện tại</label>
+            <div>
+                <img class="current" th:if="${theloai.image}" th:src="@{'/Image/' + ${theloai.image}}" alt="current" />
+                <span th:if="${theloai.image} == null" class="text-muted d-inline-block">Chưa có ảnh</span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Tải ảnh mới (tùy chọn)</label>
+            <input type="file" name="imageFile" class="form-control" accept="image/*" onchange="previewImage(event)" />
+            <div class="text-danger small" th:errors="*{image}"></div>
+            <div class="mt-2">
+                <img id="imgPreview" class="preview" alt="preview" />
+            </div>
+        </div>
+    </div>
+
+
+    <div class="d-flex gap-2">
+        <button class="btn btn-primary" type="submit">Cập nhật</button>
+        <a class="btn btn-outline-secondary" th:href="@{/theloai}">Hủy</a>
+    </div>
+</form>
+
+
+</div>
+</div>
+</div>
+<script>
+    function previewImage(e){
+        const img = document.getElementById('imgPreview');
+        const file = e.target.files && e.target.files[0];
+        if (!file){ img.removeAttribute('src'); return; }
+        const reader = new FileReader();
+        reader.onload = ev => { img.src = ev.target.result; };
+        reader.readAsDataURL(file);
+    }
+</script>
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Danh sách User</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <style>
+        body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#f6f7f9;margin:0}
+        .container{max-width:1100px;margin:0 auto;padding:16px}
+        h1{margin:0 0 12px 0;font-size:20px}
+        .toolbar{margin:12px 0}
+        .btn{display:inline-block;padding:8px 12px;border-radius:8px;text-decoration:none;border:1px solid #e5e7eb;background:#fff}
+        .btn:hover{background:#f3f4f6}
+        .btn-danger{border-color:#dc2626;color:#dc2626}
+        table{width:100%;border-collapse:collapse;background:#fff}
+        th,td{padding:10px;border-bottom:1px solid #e5e7eb;text-align:left}
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Danh sách User</h1>
+
+    <div class="toolbar">
+        <a class="btn" th:href="@{/user/add}">+ Thêm user</a>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Họ tên</th>
+            <th>Email</th>
+            <th>SĐT</th>
+            <th>Cấp độ</th>
+            <th style="width:260px">Thao tác</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="u : ${users}">
+            <td th:text="${u.userId}">1</td>
+            <td th:text="${u.hoTen}">Nguyễn Văn A</td>
+            <td th:text="${u.email}">a@example.com</td>
+            <td th:text="${u.sdt}">912345678</td>
+            <td th:text="${u.capDo}">1</td>
+            <td>
+                <a class="btn" th:href="@{|/user/${u.userId}|}">Chi tiết</a>
+                <a class="btn" th:href="@{|/user/edit/${u.userId}|}">Sửa</a>
+                <a class="btn btn-danger"
+                   th:href="@{|/user/delete?userId=${u.userId}|}"
+                   onclick="return confirm('Xóa user này?');">Xóa</a>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(users)}">
+            <td colspan="6">Chưa có user nào.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
