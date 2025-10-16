@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head th:replace="_fragments :: head(${ 'Sửa thể loại: ' + theloai.tenTheLoai })"></head>
+<body>
+<div th:replace="_fragments :: header"></div>
+
+<div class="container">
+  <div class="breadcrumbs"><a th:href="@{/theloai}">Thể loại</a> › <b th:text="${'Sửa: ' + theloai.tenTheLoai}">Sửa</b></div>
+
+  <form th:action="@{/theloai/edit/{id}(id=${theloai.theLoaiId})}" th:object="${theloai}" method="post" enctype="multipart/form-data" class="form">
+    <div class="row" style="flex-direction:column;gap:12px">
+
+      <div class="row" style="align-items:flex-start;gap:20px">
+        <div style="width:220px">
+          <label>Ảnh hiện tại</label>
+          <img class="thumb" th:if="${theloai.image != null}" th:src="@{${'/uploads/' + theloai.image}}" alt="">
+          <div class="thumb" th:if="${theloai.image == null}"></div>
+        </div>
+        <div style="flex:1">
+          <label>Thay ảnh (tuỳ chọn)</label>
+          <input type="file" name="imageFile" accept="image/*">
+          <div class="err" th:if="${#fields.hasErrors('image')}" th:errors="*{image}"></div>
+        </div>
+      </div>
+
+      <div>
+        <label>Tên thể loại</label>
+        <input type="text" th:field="*{tenTheLoai}" required>
+        <div class="err" th:if="${#fields.hasErrors('tenTheLoai')}" th:errors="*{tenTheLoai}"></div>
+      </div>
+
+      <div>
+        <label>Mô tả</label>
+        <textarea th:field="*{moTa}" rows="3"></textarea>
+        <div class="err" th:if="${#fields.hasErrors('moTa')}" th:errors="*{moTa}"></div>
+      </div>
+
+      <div class="row" style="gap:8px">
+        <button type="submit" class="btn btn-primary">Cập nhật</button>
+        <a class="btn" th:href="@{/theloai}">Huỷ</a>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div th:replace="_fragments :: footer"></div>
+</body>
+</html>

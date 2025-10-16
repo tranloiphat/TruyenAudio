@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head th:replace="_fragments :: head('Trang chủ')"></head>
+<body>
+<div th:replace="_fragments :: header"></div>
+
+<section class="hero">
+    <div class="container">
+        <h1>Khám phá truyện mới</h1>
+
+        <div class="wrap" style="margin-top:10px">
+            <a class="btn btn-primary" th:href="@{/botruyen}">Bộ truyện nổi bật</a>
+            <a class="btn" th:href="@{/theloai}">Khám phá theo thể loại</a>
+        </div>
+    </div>
+</section>
+
+<div class="container">
+    <h2 style="margin:12px 0">Mới cập nhật</h2>
+    <div id="grid" class="grid grid-sm-2 grid-lg-4">
+        <!-- Nếu đã nạp boTruyens từ controller: -->
+        <article class="card" th:each="bt : ${boTruyens}" th:attr="data-name=${bt.tenTruyen}">
+            <a th:href="@{/botruyen/{id}(id=${bt.boTruyenId})}">
+                <img class="thumb" th:if="${bt.image != null}" th:src="@{${'/uploads/' + bt.image}}" alt="">
+                <div class="thumb" th:if="${bt.image == null}"></div>
+            </a>
+            <div class="meta">
+                <div class="row"><span class="badge" th:text="${bt.trangThai} ?: 'Đang phát hành'">Đang phát hành</span></div>
+                <div style="margin-top:6px;font-weight:700" th:text="${bt.tenTruyen}">Tên truyện</div>
+                <div class="muted" th:text="${#temporals.format(bt.thoiGianPhatHanh,'dd/MM/yyyy')}">--/--/----</div>
+            </div>
+        </article>
+
+        <!-- Nếu không có dữ liệu, hiện gợi ý -->
+        <div th:if="${boTruyens == null}" class="card" style="padding:16px">
+            <b>Chưa có dữ liệu trang chủ.</b>
+            <p class="muted">Vào <a th:href="@{/botruyen}">Bộ truyện</a> để xem tất cả.</p>
+        </div>
+    </div>
+</div>
+
+<div th:replace="_fragments :: footer"></div>
+<script>attachGlobalFilter(()=>Array.from(document.querySelectorAll('#grid > article')));</script>
+</body>
+</html>

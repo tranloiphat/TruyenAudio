@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head th:replace="_fragments :: head('Bộ truyện')"></head>
+<body>
+<div th:replace="_fragments :: header"></div>
+
+<div class="container">
+    <div class="breadcrumbs"><a th:href="@{/}">Trang chủ</a> › <b>Bộ truyện</b></div>
+
+    <p class="msg" th:if="${msg}" th:text="${msg}"></p>
+    <p class="err" th:if="${error}" th:text="${error}"></p>
+
+    <div class="row" style="justify-content:space-between;margin:8px 0 12px">
+        <div class="row">
+            <label>Sắp xếp</label>
+            <select id="sortSelect" class="select">
+                <option value="name_asc">A → Z</option>
+                <option value="name_desc">Z → A</option>
+                <option value="date_desc">Mới nhất</option>
+                <option value="date_asc">Cũ nhất</option>
+            </select>
+        </div>
+        <div class="row">
+            <label>Tìm kiếm</label>
+            <input id="searchBox" class="select" placeholder="Nhập tên truyện...">
+        </div>
+    </div>
+
+    <div id="grid" class="grid grid-sm-2 grid-lg-4">
+        <article class="card" th:each="bt : ${boTruyens}"
+                 th:attr="data-name=${bt.tenTruyen},data-date=${bt.thoiGianPhatHanh}">
+            <a th:href="@{/botruyen/{id}(id=${bt.boTruyenId})}">
+                <img class="thumb" th:if="${bt.image != null}" th:src="@{${'/uploads/' + bt.image}}" alt="">
+                <div class="thumb" th:if="${bt.image == null}"></div>
+            </a>
+            <div class="meta">
+                <div class="row">
+                    <span class="badge" th:text="${bt.trangThai} ?: 'Đang phát hành'">Đang phát hành</span>
+                </div>
+                <div style="margin-top:6px;font-weight:700" th:text="${bt.tenTruyen}">Tên truyện</div>
+                <div class="muted" th:text="${#temporals.format(bt.thoiGianPhatHanh,'dd/MM/yyyy')}">--/--/----</div>
+                <div class="row" style="margin-top:8px">
+                    <a class="btn" th:href="@{/botruyen/{id}(id=${bt.boTruyenId})}">Chi tiết</a>
+                    <a class="btn" th:href="@{/botruyen/edit/{id}(id=${bt.boTruyenId})}">Sửa</a>
+                    <form th:action="@{/botruyen/delete/{id}(id=${bt.boTruyenId})}" method="post" style="display:inline">
+                        <!-- Nếu dùng Spring Security, bật CSRF:
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        -->
+                        <button type="submit" class="btn" style="border-color:#7f1d1d;background:#451a1a"
+                                onclick="return confirm('Xoá bộ truyện này?')">Xoá</button>
+                    </form>
+                </div>
+            </div>
+        </article>
+    </div>
+</div>
+
+<div th:replace="_fragments :: footer"></div>
+
+<script>
+    const grid = document.getElementById('grid');
+    const q = document.getElementById('searchBox');
+    const sortSel = document.getElementById('sortSelect');
+
+    q.addEventListener('input', ()=>{
+        const s = (q.value||'').toLowerCase();
+        [...grid.children].forEach(card=>{
+            const name = (card.dataset.name||'').toLowerCase();
+            card.style.display = name.includes(s) ? '' : 'none';
+        });
+    });
+
+    sortSel.addEventListener('change', ()=>{
+        const v = sortSel.value;
+        const items = [...grid.children];
+        items.sort((a,b)=>{
+            const na=a.dataset.name||'', nb=b.dataset.name||'';
+            const da=a.dataset.date||'', db=b.dataset.date||'';
+            if(v==='name_asc') return na.localeCompare(nb);
+            if(v==='name_desc') return nb.localeCompare(na);
+            if(v==='date_desc') return (db||'').localeCompare(da||'');
+            if(v==='date_asc') return (da||'').localeCompare(db||'');
+            return 0;
+        });
+        items.forEach(i=>grid.appendChild(i));
+    });
+</script>
+</body>
+</html>

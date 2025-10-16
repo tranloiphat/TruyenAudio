@@ -1,0 +1,3 @@
+[submodule "TruyenAudio"]
+	path = TruyenAudio
+	url = https://github.com/tranloiphat/TruyenAudio.git

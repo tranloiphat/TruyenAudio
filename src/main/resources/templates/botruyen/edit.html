@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head th:replace="_fragments :: head(${ 'Sửa: ' + boTruyen.tenTruyen })"></head>
+<body>
+<div th:replace="_fragments :: header"></div>
+
+<div class="container">
+    <div class="breadcrumbs"><a th:href="@{/botruyen}">Bộ truyện</a> › <b th:text="'Sửa: ' + ${boTruyen.tenTruyen}">Sửa</b></div>
+
+    <form th:action="@{/botruyen/edit/{id}(id=${boTruyen.boTruyenId})}" th:object="${boTruyen}" method="post" enctype="multipart/form-data" class="form">
+        <div class="row" style="flex-direction:column;gap:12px">
+            <div class="row" style="align-items:flex-start;gap:20px">
+                <div style="width:220px">
+                    <label>Ảnh hiện tại</label>
+                    <img class="thumb" th:if="${boTruyen.image != null}" th:src="@{${'/uploads/' + boTruyen.image}}" alt="">
+                    <div class="thumb" th:if="${boTruyen.image == null}"></div>
+                </div>
+                <div style="flex:1">
+                    <label>Thay ảnh (tuỳ chọn)</label>
+                    <input type="file" name="imageFile" accept="image/*">
+                    <div class="err" th:if="${#fields.hasErrors('image')}" th:errors="*{image}"></div>
+                </div>
+            </div>
+
+            <div>
+                <label>Tên truyện</label>
+                <input type="text" th:field="*{tenTruyen}" required>
+            </div>
+
+            <div class="row">
+                <div style="flex:1">
+                    <label>Trạng thái</label>
+                    <input type="text" th:field="*{trangThai}">
+                </div>
+                <div style="flex:1">
+                    <label>Thời gian phát hành</label>
+                    <input type="date" th:field="*{thoiGianPhatHanh}">
+                </div>
+            </div>
+
+            <div>
+                <label>Mô tả ngắn</label>
+                <textarea th:field="*{moTaNgan}" rows="2"></textarea>
+            </div>
+            <div>
+                <label>Mô tả dài</label>
+                <textarea th:field="*{moTaDai}" rows="4"></textarea>
+            </div>
+
+            <div>
+                <div class="row" style="justify-content:space-between;align-items:center">
+                    <label>Thuộc thể loại</label>
+                    <div class="wrap">
+                        <button type="button" class="btn" onclick="selectAllGenres(true)">Chọn tất cả</button>
+                        <button type="button" class="btn" onclick="selectAllGenres(false)">Bỏ chọn</button>
+                    </div>
+                </div>
+
+                <select id="genres" name="theLoaiIds" multiple size="6" class="select" style="width:100%;min-height:160px">
+                    <option th:each="tl : ${theLoais}"
+                            th:value="${tl.theLoaiId}"
+                            th:selected="${#lists.contains(selectedGenreIds, tl.theLoaiId)}"
+                            th:text="${tl.tenTheLoai}">
+                    </option>
+                </select>
+
+
+                <small class="muted">Giữ Ctrl/Cmd để chọn nhiều. Hoặc dùng “Chọn tất cả / Bỏ chọn”.</small>
+            </div>
+
+            <div class="row" style="gap:8px;margin-top:6px">
+                <button type="submit" class="btn btn-primary">Cập nhật</button>
+                <a class="btn" th:href="@{/botruyen}">Huỷ</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div th:replace="_fragments :: footer"></div>
+<script>
+    function selectAllGenres(flag){
+        const sel = document.getElementById('genres');
+        if(!sel) return;
+        [...sel.options].forEach(o=>o.selected = !!flag);
+    }
+</script>
+</body>
+</html>
