@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head th:replace="~{_fragments :: head(${pageTitle})}"></head>
+<body>
+<div th:replace="~{_fragments :: header}"></div>
+
+<section class="py-5">
+    <div class="container">
+        <h1 class="section-title">Thông tin thanh toán</h1>
+        <div class="row g-4 mt-3">
+            <div class="col-lg-7">
+                <form th:action="@{/checkout}" th:object="${checkoutForm}" method="post" class="checkout-summary">
+                    <div class="mb-3">
+                        <label class="form-label">Họ và tên</label>
+                        <input class="form-control" th:field="*{fullName}">
+                        <div class="text-danger small" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input class="form-control" th:field="*{email}">
+                        <div class="text-danger small" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Số điện thoại</label>
+                        <input class="form-control" th:field="*{phone}">
+                        <div class="text-danger small" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Địa chỉ giao hàng</label>
+                        <textarea class="form-control" rows="3" th:field="*{address}"></textarea>
+                        <div class="text-danger small" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Ghi chú cho cửa hàng</label>
+                        <textarea class="form-control" rows="2" th:field="*{note}"></textarea>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a class="btn btn-outline-primary" th:href="@{/cart}">Quay lại giỏ hàng</a>
+                        <button class="btn btn-gradient" type="submit">Xác nhận đặt hàng</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-lg-5">
+                <div class="checkout-summary">
+                    <h5 class="fw-semibold mb-3">Đơn hàng của bạn</h5>
+                    <div class="d-flex justify-content-between small mb-2" th:each="item : ${items}">
+                        <span th:text="${item.productName} + ' x' + item.quantity"></span>
+                        <span th:text="${#numbers.formatDecimal(item.totalPrice, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></span>
+                    </div>
+                    <hr>
+                    <div class="d-flex justify-content-between fw-bold">
+                        <span>Tổng cộng</span>
+                        <span th:text="${#numbers.formatDecimal(total, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></span>
+                    </div>
+                    <p class="text-muted small mt-3">Chúng tôi sẽ liên hệ xác nhận đơn hàng trước khi giao.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:replace="~{_fragments :: footer}"></div>
+</body>
+</html>

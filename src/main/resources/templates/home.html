@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head th:replace="~{_fragments :: head(${pageTitle})}"></head>
+<body>
+<div th:replace="~{_fragments :: header}"></div>
+
+<section class="hero-section">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <span class="badge bg-light text-primary mb-3">Thiên Long Stationery</span>
+                <h1 class="display-5 fw-bold">Văn phòng phẩm chính hãng cho doanh nghiệp & học sinh</h1>
+                <p class="lead mt-3 mb-4">Cung cấp đầy đủ dụng cụ học tập, bút viết, sổ tay, thiết bị văn phòng với chất lượng vượt trội và giá tốt nhất.</p>
+                <a class="btn btn-gradient" th:href="@{/products}">Khám phá sản phẩm</a>
+                <a class="btn btn-outline-light ms-2" th:href="@{/products/admin}">Quản lý sản phẩm</a>
+            </div>
+            <div class="col-lg-6 text-center mt-4 mt-lg-0">
+                <img th:src="@{/images/hero-stationery.png}" class="img-fluid" alt="Văn phòng phẩm" onerror="this.style.display='none'">
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h2 class="section-title">Danh mục nổi bật</h2>
+            <a class="text-decoration-none" th:href="@{/categories}">Xem tất cả →</a>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-4" th:each="category : ${categories}">
+                <a th:href="@{'/categories/' + ${category.id}}" class="category-tile d-block h-100 text-decoration-none text-dark">
+                    <img th:if="${category.imageUrl}" th:src="${category.imageUrl}" alt="" class="w-100">
+                    <div class="tile-body">
+                        <h5 class="fw-semibold" th:text="${category.name}">Bút viết</h5>
+                        <p class="text-muted" th:text="${category.description}">Dụng cụ học tập chất lượng cao.</p>
+                    </div>
+                </a>
+            </div>
+            <div th:if="${#lists.isEmpty(categories)}" class="col-12">
+                <div class="alert alert-soft">Chưa có danh mục nào. Hãy thêm danh mục mới trong phần quản trị.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="pb-5">
+    <div class="container">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h2 class="section-title">Sản phẩm mới</h2>
+            <a class="text-decoration-none" th:href="@{/products}">Xem cửa hàng →</a>
+        </div>
+        <div class="row g-4">
+            <div class="col-md-3" th:each="product : ${latestProducts}">
+                <div class="product-card h-100">
+                    <img th:if="${product.imageUrl}" th:src="${product.imageUrl}" alt="" class="w-100">
+                    <div class="card-body">
+                        <span class="badge-category mb-2" th:text="${product.category != null ? product.category.name : 'Văn phòng phẩm'}"></span>
+                        <h5 class="fw-semibold" th:text="${product.name}">Sản phẩm</h5>
+                        <p class="text-muted small" th:text="${product.description}">Mô tả sản phẩm</p>
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="price" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' ₫'">35.000 ₫</span>
+                            <form th:action="@{'/cart/add/' + ${product.id}}" method="post">
+                                <button class="btn btn-sm btn-primary">Thêm</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div th:if="${#lists.isEmpty(latestProducts)}" class="col-12">
+                <div class="alert alert-soft">Chưa có sản phẩm nào được tạo.</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:replace="~{_fragments :: footer}"></div>
+</body>
+</html>

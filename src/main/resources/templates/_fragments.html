@@ -1,83 +1,47 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="vi">
 <head th:fragment="head(title)">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title th:text="${title} ?: 'TruyenAudio'">TruyenAudio</title>
-  <style>
-    :root{--bg:#0f172a;--layer:#0b1220;--card:#111827;--line:#1f2937;--text:#e5e7eb;--muted:#9ca3af;--acc:#0ea5e9}
-    *{box-sizing:border-box}
-    body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial}
-    a{color:inherit;text-decoration:none}
-    .container{max-width:1160px;margin:auto;padding:0 16px}
-    header{position:sticky;top:0;background:var(--layer);border-bottom:1px solid var(--line);z-index:20}
-    .nav{display:flex;gap:16px;align-items:center;padding:12px 0}
-    .brand{font-weight:800;letter-spacing:.3px}
-    .search{margin-left:auto}
-    .search input{padding:8px 10px;border-radius:10px;border:1px solid var(--line);background:#0a1020;color:#e5e7eb;min-width:240px}
-    footer{margin-top:40px;background:var(--layer);border-top:1px solid var(--line);color:#94a3b8}
-    footer .container{padding:16px 16px}
-    .grid{display:grid;gap:16px}
-    @media(min-width:640px){.grid-sm-2{grid-template-columns:repeat(2,1fr)}}
-    @media(min-width:1024px){.grid-lg-4{grid-template-columns:repeat(4,1fr)}.grid-lg-3{grid-template-columns:repeat(3,1fr)}}
-    .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
-    .thumb{width:100%;aspect-ratio:3/4;object-fit:cover;background:#0a1020}
-    .meta{padding:10px}
-    .badge{display:inline-block;background:#0ea5e916;color:#7dd3fc;border:1px solid var(--acc);padding:2px 8px;border-radius:999px;font-size:12px}
-    .muted{color:var(--muted);font-size:13px}
-    .btn{display:inline-flex;align-items:center;gap:6px;padding:8px 12px;border-radius:10px;border:1px solid var(--line);background:#0a1020;color:#e5e7eb;cursor:pointer}
-    .btn:hover{border-color:#334155}
-    .btn-primary{background:linear-gradient(90deg,#0284c7,#0ea5e9);border-color:transparent}
-    .select,input,textarea{border:1px solid var(--line);border-radius:10px;background:#0b1220;color:#e5e7eb}
-    .select{padding:8px 10px}
-    .breadcrumbs{color:var(--muted);font-size:14px;margin:10px 0}
-    .row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
-    .msg{color:#22c55e}.err{color:#f87171}
-    .form{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
-    label{font-size:13px;color:var(--muted);display:block;margin-bottom:6px}
-    .hero{background:linear-gradient(90deg,#0b1220,#0d1530);border-bottom:1px solid var(--line);padding:24px 0;margin-bottom:12px}
-    .hero h1{margin:0 0 8px}
-    .reader canvas{display:block;margin:12px auto;box-shadow:0 2px 12px #0005;border-radius:10px;max-width:min(960px,100%)}
-    .reader-top{position:sticky;top:56px;background:var(--layer);border-bottom:1px solid var(--line);z-index:15}
-    .pill{display:inline-flex;gap:6px;padding:6px 10px;border:1px solid var(--line);border-radius:999px;background:#0a1020}
-    .wrap{display:flex;gap:10px;flex-wrap:wrap}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title th:text="${title} ?: 'Thiên Long Stationery'">Thiên Long Stationery</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/site.css}">
 </head>
 <body>
 <header th:fragment="header">
-  <div class="container">
-    <nav class="nav">
-      <a class="brand" th:href="@{/}">TruyenAudio</a>
-      <a th:href="@{/theloai}">Thể loại</a>
-      <a th:href="@{/botruyen}">Bộ truyện</a>
-      <a th:href="@{/chapter}">Chapter</a>
-      <span class="search">
-        <input id="globalSearch" placeholder="Tìm truyện...">
-      </span>
-      <a class="btn" th:href="@{/botruyen/add}" style="margin-left:8px">+ Thêm bộ truyện</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-primary" th:href="@{/}">Thiên Long Stationery</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                    aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="mainNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item"><a class="nav-link" th:href="@{/}">Trang chủ</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/products}">Sản phẩm</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/categories}">Danh mục</a></li>
+                    <li class="nav-item"><a class="nav-link" th:href="@{/products/admin}">Quản trị</a></li>
+                </ul>
+                <form class="d-flex" th:action="@{/search}">
+                    <input class="form-control me-2" type="search" placeholder="Tìm kiếm..." name="q">
+                    <button class="btn btn-outline-primary" type="submit">Tìm</button>
+                </form>
+                <a class="btn btn-primary ms-lg-3 mt-3 mt-lg-0 position-relative" th:href="@{/cart}">
+                    Giỏ hàng
+                    <span class="cart-badge" th:text="${cartItemCount}">0</span>
+                </a>
+            </div>
+        </div>
     </nav>
-  </div>
 </header>
-
 <footer th:fragment="footer">
-  <div class="container">© <span th:text="${#dates.format(#dates.createNow(),'yyyy')}">2025</span> TruyenAudio — built for reading manga/comics.</div>
+    <div class="bg-dark text-light py-4 mt-5">
+        <div class="container text-center small">
+            © <span th:text="${#dates.format(#dates.createNow(),'yyyy')}">2024</span> Thiên Long Stationery. Văn phòng phẩm chính hãng, giao hàng toàn quốc.
+        </div>
+    </div>
+    <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
 </footer>
-
-<!-- Helper filter cho ô search trên header -->
-<script>
-  // Các trang có grid gọi: window.attachGlobalFilter(() => document.querySelectorAll('#grid > *'))
-  window.attachGlobalFilter = (getItemsFn)=>{
-    const box = document.getElementById('globalSearch');
-    if(!box) return;
-    box.oninput = ()=>{
-      const q = (box.value||'').toLowerCase();
-      const items = getItemsFn? getItemsFn(): [];
-      items.forEach(card=>{
-        const name = (card.dataset.name||'').toLowerCase();
-        card.style.display = name.includes(q) ? '' : 'none';
-      });
-    };
-  };
-</script>
 </body>
 </html>

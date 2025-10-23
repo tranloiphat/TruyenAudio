@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head th:replace="~{_fragments :: head(${pageTitle})}"></head>
+<body>
+<div th:replace="~{_fragments :: header}"></div>
+
+<section class="py-5">
+    <div class="container">
+        <div class="row g-5">
+            <div class="col-lg-6">
+                <div class="product-card">
+                    <img th:if="${product.imageUrl}" th:src="${product.imageUrl}" alt="" class="w-100">
+                    <div class="card-body">
+                        <span class="badge-category" th:text="${product.category != null ? product.category.name : 'Văn phòng phẩm'}"></span>
+                        <h1 class="fw-bold mt-3" th:text="${product.name}">Tên sản phẩm</h1>
+                        <p class="text-muted" th:text="${product.description}"></p>
+                        <div class="d-flex align-items-center gap-3 mt-4">
+                            <span class="display-6 text-danger" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></span>
+                            <span class="badge bg-success" th:text="${'Còn ' + product.stock + ' sản phẩm'}"></span>
+                        </div>
+                        <form class="mt-4 d-flex gap-3 align-items-center" th:action="@{'/cart/add/' + ${product.id}}" method="post">
+                            <input class="form-control w-auto" name="quantity" type="number" min="1" value="1">
+                            <button class="btn btn-gradient">Thêm vào giỏ hàng</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <h3 class="section-title">Sản phẩm liên quan</h3>
+                <div class="row g-3">
+                    <div class="col-md-6" th:each="item : ${relatedProducts}">
+                        <a th:href="@{'/products/' + ${item.id}}" class="product-card text-decoration-none text-dark d-block h-100">
+                            <img th:if="${item.imageUrl}" th:src="${item.imageUrl}" alt="" class="w-100">
+                            <div class="card-body">
+                                <h5 class="fw-semibold" th:text="${item.name}">Tên sản phẩm</h5>
+                                <span class="price" th:text="${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></span>
+                            </div>
+                        </a>
+                    </div>
+                    <div th:if="${#lists.isEmpty(relatedProducts)}" class="col-12">
+                        <div class="alert alert-soft">Chưa có sản phẩm liên quan.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div th:replace="~{_fragments :: footer}"></div>
+</body>
+</html>

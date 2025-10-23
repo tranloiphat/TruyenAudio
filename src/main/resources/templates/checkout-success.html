@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head th:replace="~{_fragments :: head(${pageTitle})}"></head>
+<body>
+<div th:replace="~{_fragments :: header}"></div>
+
+<section class="py-5">
+    <div class="container">
+        <div class="checkout-summary text-center mx-auto" style="max-width: 560px;">
+            <div class="mb-4">
+                <span class="display-1 text-success">✓</span>
+                <h1 class="fw-bold mt-3">Đặt hàng thành công!</h1>
+                <p class="text-muted">Cảm ơn bạn đã tin tưởng Thiên Long Stationery. Chúng tôi sẽ liên hệ để xác nhận đơn hàng trong thời gian sớm nhất.</p>
+            </div>
+            <div class="text-start">
+                <p><strong>Mã đơn hàng:</strong> <span th:text="${order.id}"></span></p>
+                <p><strong>Khách hàng:</strong> <span th:text="${order.customerName}"></span></p>
+                <p><strong>Email:</strong> <span th:text="${order.email}"></span></p>
+                <p><strong>Số điện thoại:</strong> <span th:text="${order.phone}"></span></p>
+                <p><strong>Địa chỉ:</strong> <span th:text="${order.address}"></span></p>
+                <p><strong>Tổng thanh toán:</strong> <span th:text="${#numbers.formatDecimal(order.total, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></span></p>
+            </div>
+            <a class="btn btn-gradient mt-4" th:href="@{/}">Tiếp tục mua sắm</a>
+        </div>
+    </div>
+</section>
+
+<div th:replace="~{_fragments :: footer}"></div>
+</body>
+</html>

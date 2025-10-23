@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head th:replace="~{_fragments :: head(${pageTitle})}"></head>
+<body>
+<div th:replace="~{_fragments :: header}"></div>
+
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex align-items-center justify-content-between mb-4">
+            <h1 class="section-title" th:text="${pageTitle}">Quản lý sản phẩm</h1>
+            <a class="btn btn-gradient" th:href="@{/products/admin/new}">+ Thêm sản phẩm</a>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Hình ảnh</th>
+                    <th>Tên sản phẩm</th>
+                    <th>Danh mục</th>
+                    <th>Giá</th>
+                    <th>Tồn kho</th>
+                    <th class="text-end">Hành động</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="product : ${products}">
+                    <td th:text="${product.id}"></td>
+                    <td><img th:if="${product.imageUrl}" th:src="${product.imageUrl}" alt="" style="width:60px;height:60px;object-fit:cover;border-radius:12px;"></td>
+                    <td th:text="${product.name}"></td>
+                    <td th:text="${product.category != null ? product.category.name : 'Chưa gán'}"></td>
+                    <td th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT')} + ' ₫'"></td>
+                    <td th:text="${product.stock}"></td>
+                    <td class="text-end">
+                        <a class="btn btn-sm btn-outline-primary" th:href="@{'/products/admin/' + ${product.id} + '/edit'}">Sửa</a>
+                        <form th:action="@{'/products/admin/' + ${product.id} + '/delete'}" method="post" class="d-inline">
+                            <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Xóa sản phẩm này?')">Xóa</button>
+                        </form>
+                    </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(products)}">
+                    <td colspan="7" class="text-center text-muted">Chưa có sản phẩm nào.</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<div th:replace="~{_fragments :: footer}"></div>
+</body>
+</html>
