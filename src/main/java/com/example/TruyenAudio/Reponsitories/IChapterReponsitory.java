@@ -10,6 +10,7 @@ import java.util.List;
 
 @Repository
 public interface IChapterReponsitory extends JpaRepository<Chapter, Integer> {
-
-
+    @Query ("""
+select c from Chapter c join fetch c.BoTruyen b order by c.ChapterId desc""")
+    List<Chapter> findLatestWithBoTruyen(org.springframework.data.domain.Pageable pageable);
 }

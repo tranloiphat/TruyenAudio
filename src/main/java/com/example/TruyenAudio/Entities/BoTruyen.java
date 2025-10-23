@@ -55,4 +55,9 @@ public class BoTruyen {
 
     @OneToMany(mappedBy = "BoTruyen", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Chapter> chapters;
+
+    @ManyToOne
+    @JoinColumn (name = "user_id")
+    private User user;
+
 }
